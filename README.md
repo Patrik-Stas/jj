@@ -8,6 +8,12 @@ Directory bookmarking for your terminal. Save spots, jump back instantly.
 
 ## Install
 
+### Homebrew (macOS / Linux)
+
+```bash
+brew install Patrik-Stas/tap/jj
+```
+
 ### From release binaries
 
 Download the binary for your platform from [Releases](https://github.com/Patrik-Stas/jj/releases), then:
@@ -28,7 +34,9 @@ make build
 sudo make install
 ```
 
-## Shell setup
+### Shell setup
+
+The install methods above place a `_jj` binary on your system. This binary manages your spots but can't change your shell's directory on its own — so you need to load a small shell function that wraps it.
 
 Add to your `~/.zshrc`:
 
@@ -42,7 +50,7 @@ Or for bash, add to `~/.bashrc`:
 eval "$(_jj init bash)"
 ```
 
-Restart your shell or `source` the file.
+Then restart your shell or `source` the file. You'll now have the `jj` command available.
 
 ## Usage
 

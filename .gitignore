@@ -1,6 +1,6 @@
 # Build artifacts
 _jj
-_jj-*
+dist/
 
 # Go
 *.exe
