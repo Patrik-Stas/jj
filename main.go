@@ -96,6 +96,31 @@ func cmdRemove(args []string) int {
 	return 0
 }
 
+func cmdClean(args []string) int {
+	spots := loadSpots()
+	var removed []string
+	for name, path := range spots {
+		info, err := os.Stat(path)
+		if err != nil || !info.IsDir() {
+			removed = append(removed, name)
+			delete(spots, name)
+		}
+	}
+	if len(removed) == 0 {
+		fmt.Println("all spots are valid")
+		return 0
+	}
+	sort.Strings(removed)
+	if err := saveSpots(spots); err != nil {
+		fmt.Fprintf(os.Stderr, "error: %v\n", err)
+		return 1
+	}
+	for _, name := range removed {
+		fmt.Printf("removed stale spot %q\n", name)
+	}
+	return 0
+}
+
 func cmdList(args []string) int {
 	spots := loadSpots()
 	prefix := ""
@@ -187,10 +212,11 @@ jj() {
             echo "  jj save [name]    save current directory as a spot (default: dirname)"
             echo "  jj list [prefix]  list spots"
             echo "  jj remove <name>  remove a spot"
+            echo "  jj clean          remove spots with dead paths"
             echo "  jj <name>         jump to a spot"
             echo "  jj init <shell>   print shell setup code"
             ;;
-        save|list|remove|init)
+        save|list|remove|clean|init)
             command _jj "$@"
             ;;
         *)
@@ -228,10 +254,11 @@ jj() {
             echo "  jj save [name]    save current directory as a spot (default: dirname)"
             echo "  jj list [prefix]  list spots"
             echo "  jj remove <name>  remove a spot"
+            echo "  jj clean          remove spots with dead paths"
             echo "  jj <name>         jump to a spot"
             echo "  jj init <shell>   print shell setup code"
             ;;
-        save|list|remove|init)
+        save|list|remove|clean|init)
             command _jj "$@"
             ;;
         *)
@@ -301,6 +328,8 @@ func main() {
 		code = cmdList(rest)
 	case "remove":
 		code = cmdRemove(rest)
+	case "clean":
+		code = cmdClean(rest)
 	case "resolve":
 		code = cmdResolve(rest)
 	case "complete":

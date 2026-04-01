@@ -50,6 +50,7 @@ Restart your shell or `source` the file.
 jj save [name]    save current directory as a spot (default: dirname)
 jj list [prefix]  list spots
 jj remove <name>  remove a spot
+jj clean          remove spots with dead paths
 jj <name>         jump to a spot
 ```
 
